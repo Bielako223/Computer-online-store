@@ -10,7 +10,7 @@ namespace StoreLibrary.Models
     public class CategoryModel
     {
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string CategoryName { get; set; }
     }
 }

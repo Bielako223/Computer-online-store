@@ -1,0 +1,12 @@
+﻿@using StoreLibrary.Models;
+@model List<ItemModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+@foreach(var obj in Model)
+{
+    <h2>@obj.Name</h2>
+}
+

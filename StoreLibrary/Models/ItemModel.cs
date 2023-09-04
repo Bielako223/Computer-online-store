@@ -13,11 +13,13 @@ namespace StoreLibrary.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public CategoryModel Category { get; set; } = new();
+
+        public int Price { get; set; }
         public int Discount { get; set; } = 0;
         public string Details { get; set; }
         public string ImgPath { get; set; }
         public int Quantity { get; set; }
+        public CategoryModel Category { get; set; } = new();
 
     }
 }

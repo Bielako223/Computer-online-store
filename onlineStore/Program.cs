@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using StoreLibrary.Data;
+using StoreLibrary.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreDataContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IitemData, ItemData>();
 
 var app = builder.Build();
     

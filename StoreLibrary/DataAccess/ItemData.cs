@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StoreLibrary.DataAccess
 {
-    public class ItemData
+    public class ItemData : IitemData
     {
         private readonly StoreDataContext _db;
         public ItemData(StoreDataContext db)
@@ -28,7 +28,7 @@ namespace StoreLibrary.DataAccess
                 return null;
         }
 
-        public async Task<ItemModel> GetItem(int id)
+        public async Task<ItemModel> GetItemById(int id)
         {
             var output = await _db.Items.Where(x => x.Id == id).FirstOrDefaultAsync();
             return output;
