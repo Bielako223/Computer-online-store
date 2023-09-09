@@ -1,0 +1,12 @@
+﻿@using StoreLibrary.Models;
+@model ItemModel
+@{
+    ViewData["Title"] = "Details";
+}
+<img src="/img/@Model.ImgPath" width="300px" height="300px />
+<h1>@Model.Name</h1>
+<h2>@Model.Price</h2>
+<a asp-controller="Items" asp-action="Index" class="btn btn-secondary" style="width:150px">
+    Back to Items
+</a>
+

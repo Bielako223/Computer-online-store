@@ -23,5 +23,20 @@ namespace OnlineStore.Controllers
             var items = await _data.GetAllItems();
             return View(items);
         }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var ItemById = await _data.GetItemById((int)Convert.ToInt64(id));
+            if (ItemById == null)
+            {
+                return NotFound();
+            }
+            return View(ItemById);
+        }
+
     }
 }

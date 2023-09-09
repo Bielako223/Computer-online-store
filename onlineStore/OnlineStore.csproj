@@ -18,4 +18,14 @@
     <ProjectReference Include="..\StoreLibrary\StoreLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\img\debi.jpg" />
+    <None Include="wwwroot\img\saral.jpg" />
+    <None Include="wwwroot\img\stefan.jpg" />
+  </ItemGroup>
+
 </Project>

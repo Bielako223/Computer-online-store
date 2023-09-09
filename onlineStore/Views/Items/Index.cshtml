@@ -4,9 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 @foreach(var obj in Model)
 {
-    <h2>@obj.Name</h2>
+    <div >
+        <img src="/img/@obj.ImgPath" width="100px" height="100px"/>
+        <h2><a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">@obj.Name</a> </h2>
+    </div>
 }
 

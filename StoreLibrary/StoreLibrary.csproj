@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Img\" />
+    <Compile Remove="Img\**" />
+    <EmbeddedResource Remove="Img\**" />
+    <None Remove="Img\**" />
   </ItemGroup>
 
   <ItemGroup>
