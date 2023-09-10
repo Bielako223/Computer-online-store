@@ -7,8 +7,13 @@
 @foreach(var obj in Model)
 {
     <div >
-        <img src="/img/@obj.ImgPath" width="100px" height="100px"/>
-        <h2><a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">@obj.Name</a> </h2>
+        
+        <a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">
+            <div>
+                <img src="/img/@obj.ImgPath" width="100px" height="100px" />
+                <h2>@obj.Name</h2>
+            </div>
+        </a>
     </div>
 }
 

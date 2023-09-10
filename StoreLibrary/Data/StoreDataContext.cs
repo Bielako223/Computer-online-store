@@ -15,5 +15,6 @@ namespace StoreLibrary.Data
         public DbSet<CategoryModel> Category { get; set; }
         public DbSet<UserAddressModel> Address { get; set; }
         public DbSet<UserModel> User { get; set; }
+        public DbSet<ShoppingCartItemModel> ShoppingCartItems { get; set; }
     }
 }
