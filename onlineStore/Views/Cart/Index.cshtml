@@ -1,0 +1,10 @@
+﻿@using StoreLibrary.Models;
+@model ShoppingCartViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+@foreach(var obj in Model.ShoppingCart.ShoppingCartItems)
+{
+    @obj.Item.Name
+}
+
