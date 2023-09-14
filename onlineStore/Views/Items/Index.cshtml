@@ -12,7 +12,7 @@
             <div>
                 <img src="/img/@obj.ImgPath" width="100px" height="100px" />
                 <h2>@obj.Name</h2>
-                <a asp-controller="Cart" asp-action="AddToCart(@obj.Id)">Add To Cart</a>
+                <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Id">Add To Cart</a>
             </div>
         </a>
     </div>

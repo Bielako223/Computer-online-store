@@ -13,6 +13,8 @@ namespace StoreLibrary.Models
 {
     public class ShoppingCartModel
     {
+        public string ShoppingCartId { get; set; }
+        public List<ShoppingCartItemModel> ShoppingCartItems { get; set; }
         private readonly StoreDataContext _db;
         public ShoppingCartModel(StoreDataContext db)
         {
@@ -77,7 +79,8 @@ namespace StoreLibrary.Models
 
         public List<ShoppingCartItemModel> GetShoppingCartItems()
         {
-            return ShoppingCartItems ?? (ShoppingCartItems = _db.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Include(s => s.Item).ToList());
+            return ShoppingCartItems ?? (_db.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Include(s => s.Item).ToList());
+             
         }
 
         public void ClearCart()
@@ -93,7 +96,6 @@ namespace StoreLibrary.Models
             return total;
         }
 
-        public string ShoppingCartId { get; set; }
-        public List<ShoppingCartItemModel> ShoppingCartItems { get; set; }
+        
     }
 }
