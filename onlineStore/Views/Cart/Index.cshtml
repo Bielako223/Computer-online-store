@@ -3,8 +3,16 @@
 @{
     ViewData["Title"] = "Index";
 }
-@foreach(var obj in Model.ShoppingCart.ShoppingCartItems)
-{
-    @obj.Item.Name
-}
+<table>
+    @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
+    {
+        <tr>
+            <th><img src="/img/@obj.Item.ImgPath" width="50px" height="50px" /></th>
+            <th>@obj.Item.Name</th>
+            <th>@obj.Amount</th>
+            <th>@obj.Item.Price zł</th>
+        </tr>
+    }
+</table>
+
 
