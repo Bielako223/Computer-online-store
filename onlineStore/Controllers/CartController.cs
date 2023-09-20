@@ -45,6 +45,17 @@ namespace OnlineStore.Controllers
             var item = await _itemData.GetItemById(itemId);
             if (item != null)
             {
+                _ShoppingCart.RemoveTotalFromCart(item);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<RedirectToActionResult> RemoveOneItemFromCart(int itemId)
+        {
+            var item = await _itemData.GetItemById(itemId);
+            if (item != null)
+            {
                 _ShoppingCart.RemoveFromCart(item);
             }
 

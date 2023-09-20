@@ -77,6 +77,22 @@ namespace StoreLibrary.Models
             return localAmount;
         }
 
+        public int RemoveTotalFromCart(ItemModel item)
+        {
+            var shoppingCartItem = _db.ShoppingCartItems.SingleOrDefault(s => s.Item.Id == item.Id && s.ShoppingCartId == ShoppingCartId);
+            var localAmount = 0;
+
+            if (shoppingCartItem != null)
+            {
+               
+                    _db.ShoppingCartItems.Remove(shoppingCartItem);
+                
+            }
+            _db.SaveChanges();
+
+            return localAmount;
+        }
+
         public List<ShoppingCartItemModel> GetShoppingCartItems()
         {
             return ShoppingCartItems ?? (_db.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Include(s => s.Item).ToList());
