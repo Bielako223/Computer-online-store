@@ -17,10 +17,23 @@ namespace OnlineStore.Controllers
             _data = data;
 
         }
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var items = await _data.GetAllItems();
+            return View(items);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(string searchingName, int priceMin, int priceMax, int categoryId)
+        {
+            var searching = searchingName;
+            var min = priceMin;
+            var max = priceMax;
+            var category = categoryId;
+
+            var items = await _data.GetSearchedItems(searching,min,max,category);
+            ViewBag.Name = searchingName;
+    
             return View(items);
         }
 

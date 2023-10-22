@@ -28,6 +28,41 @@ namespace StoreLibrary.DataAccess
                 return null;
         }
 
+        public async Task<List<ItemModel>> GetSearchedItems(string searchingName, int priceMin, int priceMax, int categoryId)
+        {
+            if (_db.Items.Count() != 0)
+            {
+                if (searchingName != null && categoryId == 0)
+                {
+                    var output = await _db.Items.Where(x => x.Name.Contains(searchingName) && x.Price >= priceMin && x.Price <= priceMax).ToListAsync();
+                    return output;
+                }
+                else
+                {
+                    if (searchingName == null && categoryId == 0)
+                    {
+                        var output = await _db.Items.Where(x => x.Price >= priceMin && x.Price <= priceMax).ToListAsync();
+                        return output;
+                    }
+                    else
+                    {
+                        if (searchingName == null && categoryId != 0)
+                        {
+                            var output = await _db.Items.Where(x => x.Price >= priceMin && x.Price <= priceMax && x.Category.Id == categoryId).ToListAsync();
+                            return output;
+                        }
+                        else
+                        {
+                            var output = await _db.Items.Where(x => x.Name.Contains(searchingName) && x.Price >= priceMin && x.Price <= priceMax && x.Category.Id == categoryId).ToListAsync();
+                            return output;
+                        }
+                    }
+                }
+            }
+            else
+                return null;
+        }
+
         public async Task<ItemModel> GetItemById(int id)
         {
             var output = await _db.Items.Where(x => x.Id == id).FirstOrDefaultAsync();
