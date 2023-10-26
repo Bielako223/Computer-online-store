@@ -6,6 +6,7 @@
 <img src="/img/@Model.ImgPath" alt="@Model.Name" width="300px" height="300px" />
 <h1>@Model.Name</h1>
 <h2>@Model.Price zł</h2>
+<a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@Model.Id">Add To Cart</a>
 <a asp-controller="Items" asp-action="Index" class="btn btn-secondary" style="width:150px">
     Back to Items
 </a>

@@ -13,27 +13,26 @@ namespace OnlineStore.Controllers
 {
     public  class ItemsController : Controller
     {
-        [BindProperty]
         public SearchingModel _filtering { get; set; }
         private readonly IHttpContextAccessor _contx;
         private readonly ILogger<ItemsController> _logger;  
-
         private readonly IitemData _data;
+
+
         [ActivatorUtilitiesConstructor]
         public ItemsController(IitemData data, IHttpContextAccessor contx, ILogger<ItemsController> logger)
         {
-
             _data = data;
             _contx = contx;
             _logger = logger;
-            string filteringString = JsonConvert.SerializeObject(_filtering);
-            _contx.HttpContext.Session.SetString("filter", "");
         }
+
+
         public async Task<IActionResult> Index()
         {
-            SearchingModel sessionFiltering = new SearchingModel();
+            string JsonFiltering = _contx.HttpContext.Session.GetString("filter");
 
-            if (_contx.HttpContext.Session.GetString("filter").IsNullOrEmpty())
+            if (JsonFiltering.IsNullOrEmpty())
             {
                 var _items = await _data.GetAllItems();
                 ViewBag.min = 0;
@@ -50,9 +49,9 @@ namespace OnlineStore.Controllers
                     string filteringString = JsonConvert.SerializeObject(_filtering);
                     _contx.HttpContext.Session.SetString("filter", filteringString);
                 }
-                string filteringJson = _contx.HttpContext.Session.GetString("filter");
-                SearchingModel searchingModel = JsonConvert.DeserializeObject<SearchingModel>(filteringJson);
-                var _items = await _data.GetSearchedItems(searchingModel);
+                JsonFiltering = _contx.HttpContext.Session.GetString("filter");
+                _filtering = JsonConvert.DeserializeObject<SearchingModel>(JsonFiltering);
+                var _items = await _data.GetSearchedItems(_filtering);
                 ViewBag.Name = _filtering.Name;
                 ViewBag.min = _filtering.Min;
                 ViewBag.max = _filtering.Max;
@@ -64,31 +63,26 @@ namespace OnlineStore.Controllers
         }
 
 
-
-        //public async Task<IActionResult> Index(Object str)
-        //{
-        //    str
-        //    var items = await _data.GetAllItems();
-        //    ViewBag.min = 0;
-        //    ViewBag.max = 3000;
-        //    ViewBag.category = 0;
-        //    return View(items);
-        //}
-
-       /* [HttpPost]
-        public async Task<IActionResult> Index(string searchingName="", int priceMin=0, int priceMax=3000, int categoryId = 0)
+        [HttpPost]
+        public async Task<IActionResult> Index(string Name = "", int Min = 0, int Max = 3000, int Category = 0)
         {
-            var searching = searchingName;
-            var min = priceMin;
-            var max = priceMax;
-            var category = categoryId;
+            _filtering.Name= Name;
+            _filtering.Min = Min;
+            _filtering.Max = Max;
+            _filtering.Category = Category;
+            ViewBag.Name = _filtering.Name;
+            ViewBag.min = _filtering.Min;
+            ViewBag.max = _filtering.Max;
+            ViewBag.category = _filtering.Category;
+            string filteringString = JsonConvert.SerializeObject(_filtering);
+            _contx.HttpContext.Session.SetString("filter", filteringString);
+            string filteringJson = _contx.HttpContext.Session.GetString("filter");
+            var _items = await _data.GetSearchedItems(_filtering);
 
-            _items = await _data.GetSearchedItems(searching,min,max,category);
-            
-    
+
             return View(_items);
         }
-        */
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
