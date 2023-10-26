@@ -16,7 +16,10 @@ builder.Services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 
 
 builder.Services.AddMemoryCache();
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+});
 builder.Services.AddScoped(sp => ShoppingCartModel.GetCart(sp));
 
 var app = builder.Build();

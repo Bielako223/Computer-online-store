@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Index";
 }
-<form method="post" asp-action="Index">
-    <input type="text" name="searchingName" value="@ViewBag.Name"/>
-    <input type="number" name="priceMin" value="0" min="0" max="10000" />
-    <input type="number" name="priceMax" value="3000" min="0" max="10000" />
-    <input type="radio" name="categoryId" value="1"/>
-    <input type="radio" name="categoryId" value="2" />
+<form method="post">
+    <input type="text" name="_filtering.Name" value="@ViewBag.Name" />
+    <input type="number" name="_filtering.Min" value="@ViewBag.min" min="0" max="10000" />
+    <input type="number" name="_filtering.Max" value="@ViewBag.max" min="0" max="10000" />
+    <input type="radio" name="_filtering.Category" value="1" @(ViewBag.category.Equals(1) ? "Checked" : String.Empty) />
+    <input type="radio" name="_filtering.Category" value="2" @(ViewBag.category.Equals(2) ? "Checked" : String.Empty) />
     <input type="submit" />
 </form>
 @foreach(var obj in Model)

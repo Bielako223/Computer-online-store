@@ -28,32 +28,32 @@ namespace StoreLibrary.DataAccess
                 return null;
         }
 
-        public async Task<List<ItemModel>> GetSearchedItems(string searchingName, int priceMin, int priceMax, int categoryId)
+        public async Task<List<ItemModel>> GetSearchedItems(SearchingModel model)
         {
             if (_db.Items.Count() != 0)
             {
-                if (searchingName != null && categoryId == 0)
+                if (model.Name != null && model.Category == 0)
                 {
-                    var output = await _db.Items.Where(x => x.Name.Contains(searchingName) && x.Price >= priceMin && x.Price <= priceMax).ToListAsync();
+                    var output = await _db.Items.Where(x => x.Name.Contains(model.Name) && x.Price >= model.Min && x.Price <= model.Max).ToListAsync();
                     return output;
                 }
                 else
                 {
-                    if (searchingName == null && categoryId == 0)
+                    if (model.Name == null && model.Category == 0)
                     {
-                        var output = await _db.Items.Where(x => x.Price >= priceMin && x.Price <= priceMax).ToListAsync();
+                        var output = await _db.Items.Where(x => x.Price >= model.Min && x.Price <= model.Max).ToListAsync();
                         return output;
                     }
                     else
                     {
-                        if (searchingName == null && categoryId != 0)
+                        if (model.Name == null && model.Category != 0)
                         {
-                            var output = await _db.Items.Where(x => x.Price >= priceMin && x.Price <= priceMax && x.Category.Id == categoryId).ToListAsync();
+                            var output = await _db.Items.Where(x => x.Price >= model.Min && x.Price <= model.Max && x.Category.Id == model.Category).ToListAsync();
                             return output;
                         }
                         else
                         {
-                            var output = await _db.Items.Where(x => x.Name.Contains(searchingName) && x.Price >= priceMin && x.Price <= priceMax && x.Category.Id == categoryId).ToListAsync();
+                            var output = await _db.Items.Where(x => x.Name.Contains(model.Name) && x.Price >= model.Min && x.Price <= model.Max && x.Category.Id == model.Category).ToListAsync();
                             return output;
                         }
                     }
