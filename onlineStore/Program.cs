@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using StoreLibrary.Data;
 using StoreLibrary.DataAccess;
 using StoreLibrary.Models;
+using Microsoft.AspNetCore.Identity;
+using OnlineStore.Data;
+using OnlineStore.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreDataContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<UserContext>();
+builder.Services.AddScoped<IUserData, UserData>();
 builder.Services.AddScoped<IitemData, ItemData>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 
@@ -42,5 +51,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Items}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 app.Run();

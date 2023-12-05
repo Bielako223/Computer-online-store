@@ -32,21 +32,21 @@ namespace StoreLibrary.DataAccess
         {
             if (_db.Items.Count() != 0)
             {
-                if (model.Name != null && model.Category == 0)
+                if (model.Name != "" && model.Category == 0)
                 {
                     var output = await _db.Items.Where(x => x.Name.Contains(model.Name) && x.Price >= model.Min && x.Price <= model.Max).ToListAsync();
                     return output;
                 }
                 else
                 {
-                    if (model.Name == null && model.Category == 0)
+                    if (model.Name == "" && model.Category == 0)
                     {
                         var output = await _db.Items.Where(x => x.Price >= model.Min && x.Price <= model.Max).ToListAsync();
                         return output;
                     }
                     else
                     {
-                        if (model.Name == null && model.Category != 0)
+                        if (model.Name == "" && model.Category != 0)
                         {
                             var output = await _db.Items.Where(x => x.Price >= model.Min && x.Price <= model.Max && x.Category.Id == model.Category).ToListAsync();
                             return output;

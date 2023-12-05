@@ -10,11 +10,9 @@ namespace StoreLibrary.Data
 {
     public class StoreDataContext: DbContext
     {
-        public StoreDataContext(DbContextOptions options): base(options) { }
+        public StoreDataContext(DbContextOptions<StoreDataContext> options): base(options) { }
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<CategoryModel> Category { get; set; }
-        public DbSet<UserAddressModel> Address { get; set; }
-        public DbSet<UserModel> User { get; set; }
         public DbSet<ShoppingCartItemModel> ShoppingCartItems { get; set; }
     }
 }

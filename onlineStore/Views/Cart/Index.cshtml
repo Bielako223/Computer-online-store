@@ -12,12 +12,24 @@
             <th>
                 <a asp-controller="Cart" asp-action="RemoveOneItemFromCart" asp-route-itemId="@obj.Item.Id">-</a>
                 [@obj.Amount]
-                <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Item.Id">+</a>
+                @if (obj.Amount < obj.Item.Quantity)
+                {
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Item.Id">+</a>
+                }
+                
             </th>
             <th>@obj.Item.Price zł</th>
             <th> <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-itemId="@obj.Item.Id">Delete</a></th>
         </tr>
     }
 </table>
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Cart" asp-action="Order">Zamów</a>
+}
+else
+{
+    <span>zaloguj sie</span>
+}
 
 

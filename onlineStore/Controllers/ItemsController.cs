@@ -22,7 +22,7 @@ namespace OnlineStore.Controllers
         [ActivatorUtilitiesConstructor]
         public ItemsController(IitemData data, IHttpContextAccessor contx, ILogger<ItemsController> logger)
         {
-
+            
             _data = data;
             _contx = contx;
             _logger = logger;
@@ -32,6 +32,7 @@ namespace OnlineStore.Controllers
         public async Task<IActionResult> Index()
         {
             SearchingModel sessionFiltering = new SearchingModel();
+            var zse = _contx.HttpContext.Session.GetString("filter").ToString();
 
             if (_contx.HttpContext.Session.GetString("filter").IsNullOrEmpty())
             {
@@ -39,8 +40,9 @@ namespace OnlineStore.Controllers
                 ViewBag.min = 0;
                 ViewBag.max = 3000;
                 ViewBag.category = 0;
-                string filteringString = JsonConvert.SerializeObject(new SearchingModel { Name = null, Min = 0, Max = 3000, Category = 0 });
+                string filteringString = JsonConvert.SerializeObject(new SearchingModel { Name = "", Min = 0, Max = 3000, Category = 0 });
                 _contx.HttpContext.Session.SetString("filter", filteringString);
+                zse = _contx.HttpContext.Session.GetString("filter").ToString();
                 return View(_items);
             }
             else
@@ -75,20 +77,21 @@ namespace OnlineStore.Controllers
         //    return View(items);
         //}
 
-       /* [HttpPost]
-        public async Task<IActionResult> Index(string searchingName="", int priceMin=0, int priceMax=3000, int categoryId = 0)
-        {
-            var searching = searchingName;
-            var min = priceMin;
-            var max = priceMax;
-            var category = categoryId;
+        /* [HttpPost]
+         public async Task<IActionResult> Index(string searchingName="", int priceMin=0, int priceMax=3000, int categoryId = 0)
+         {
+             var searching = searchingName;
+             var min = priceMin;
+             var max = priceMax;
+             var category = categoryId;
 
-            _items = await _data.GetSearchedItems(searching,min,max,category);
-            
-    
-            return View(_items);
-        }
-        */
+             _items = await _data.GetSearchedItems(searching,min,max,category);
+
+
+        eturn View(_items);
+         }
+         */
+   
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
