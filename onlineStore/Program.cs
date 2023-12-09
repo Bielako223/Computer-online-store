@@ -5,6 +5,7 @@ using StoreLibrary.DataAccess;
 using StoreLibrary.Models;
 using Microsoft.AspNetCore.Identity;
 using OnlineStore.Data;
+using OnlineStore.Areas.Identity.Data;
 using OnlineStore.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreDataContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<UserContext>();
 builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<UserContext>();
+
 builder.Services.AddScoped<IUserData, UserData>();
 builder.Services.AddScoped<IitemData, ItemData>();
 

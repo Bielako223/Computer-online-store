@@ -15,24 +15,19 @@ namespace OnlineStore.Controllers
     {
         [BindProperty]
         public SearchingModel _filtering { get; set; }
-        private readonly IHttpContextAccessor _contx;
-        private readonly ILogger<ItemsController> _logger;  
+        private readonly IHttpContextAccessor _contx; 
 
         private readonly IitemData _data;
         [ActivatorUtilitiesConstructor]
-        public ItemsController(IitemData data, IHttpContextAccessor contx, ILogger<ItemsController> logger)
+        public ItemsController(IitemData data, IHttpContextAccessor contx)
         {
             
             _data = data;
             _contx = contx;
-            _logger = logger;
-            string filteringString = JsonConvert.SerializeObject(_filtering);
-            _contx.HttpContext.Session.SetString("filter", "");
         }
         public async Task<IActionResult> Index()
         {
             SearchingModel sessionFiltering = new SearchingModel();
-            var zse = _contx.HttpContext.Session.GetString("filter").ToString();
 
             if (_contx.HttpContext.Session.GetString("filter").IsNullOrEmpty())
             {
@@ -40,9 +35,8 @@ namespace OnlineStore.Controllers
                 ViewBag.min = 0;
                 ViewBag.max = 3000;
                 ViewBag.category = 0;
-                string filteringString = JsonConvert.SerializeObject(new SearchingModel { Name = "", Min = 0, Max = 3000, Category = 0 });
+                string filteringString = JsonConvert.SerializeObject(new SearchingModel { Name = null, Min = 0, Max = 3000, Category = 0 });
                 _contx.HttpContext.Session.SetString("filter", filteringString);
-                zse = _contx.HttpContext.Session.GetString("filter").ToString();
                 return View(_items);
             }
             else
@@ -55,6 +49,7 @@ namespace OnlineStore.Controllers
                 string filteringJson = _contx.HttpContext.Session.GetString("filter");
                 SearchingModel searchingModel = JsonConvert.DeserializeObject<SearchingModel>(filteringJson);
                 var _items = await _data.GetSearchedItems(searchingModel);
+                _filtering = searchingModel;
                 ViewBag.Name = _filtering.Name;
                 ViewBag.min = _filtering.Min;
                 ViewBag.max = _filtering.Max;

@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Index";
 }
+@if (TempData["AddressError"] != null)
+{
+    @TempData["AddressError"]
+}
 <table>
     @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
     {
@@ -16,6 +20,12 @@
         </tr>
     }
 </table>
+Total: @ViewBag.total
+Address:
+@ViewBag.City
+@ViewBag.Street
+@ViewBag.HouseNumber
+@ViewBag.Zipcode
 @if (User.Identity.IsAuthenticated)
 {
     <a asp-controller="Cart" asp-action="Buy">Buy</a>

@@ -4,6 +4,10 @@
     ViewData["Title"] = "Index";
 }
 <table>
+    @if (TempData["limit"] != null)
+    {
+        @TempData["limit"]
+    }
     @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
     {
         <tr>

@@ -1,0 +1,28 @@
+﻿@using OnlineStore.Models;
+@model List<OrderandAddressViewModel>
+
+
+<a href="/Identity/Account/Manage">back</a>
+@foreach(var mainList in Model)
+{
+    var sum = 0;
+    <div style="margin:20px">
+        <ul>
+        @foreach(var item in mainList.ListOfOrders)
+        {
+            <li>
+
+                    <img src="/img/@item.ItemModel.ImgPath" width="100px" height="100px" />
+                    @item.ItemModel.Name
+                    @item.ItemModel.Price
+                </li>
+                sum = sum + item.ItemModel.Price;
+            }
+        </ul>
+        @sum
+        @mainList.AddressforOrder.City
+        @mainList.AddressforOrder.Street
+        @mainList.AddressforOrder.HouseNumber
+        @mainList.AddressforOrder.Zipcode
+    </div>
+}

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineStore.Areas.Identity.Data
+namespace StoreLibrary.Models
 {
     public class OrderModel
     {

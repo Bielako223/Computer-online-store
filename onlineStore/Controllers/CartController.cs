@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
+using OnlineStore.Areas.Identity.Data;
 using OnlineStore.DataAccess;
+using OnlineStore.Models;
 using StoreLibrary.DataAccess;
 using StoreLibrary.Migrations;
 using StoreLibrary.Models;
@@ -11,13 +14,14 @@ namespace OnlineStore.Controllers
 {
     public class CartController : Controller
     {
+
         private readonly ShoppingCartModel _ShoppingCart;
         private readonly IitemData _itemData;
         private readonly IUserData _userData;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public CartController(ShoppingCartModel shoppingCartModel, IitemData itemData,IUserData userData, UserManager<IdentityUser> userManager)
+        public CartController(ShoppingCartModel shoppingCartModel,IUserData userData, IitemData itemData, UserManager<ApplicationUser> userManager)
         {
             _ShoppingCart= shoppingCartModel;   
             _itemData= itemData;
@@ -38,7 +42,7 @@ namespace OnlineStore.Controllers
             return View(sCVM);
         }
 
-        public async Task<RedirectToActionResult> AddToCart(int itemId)
+        public async Task<ActionResult> AddToCart(int itemId)
         {
            var item = await _itemData.GetItemById(itemId);
             if (item !=null)
@@ -48,7 +52,11 @@ namespace OnlineStore.Controllers
                     if (itemfromCart.Amount<item.Quantity)
                     {
                         _ShoppingCart.AddToCart(item, 1);
-                    };
+                    }
+                    else
+                    {
+                        TempData["limit"] = "Limit of this item";
+                    }
                 }
                 else
                 {
@@ -86,6 +94,15 @@ namespace OnlineStore.Controllers
         {
             var items = _ShoppingCart.GetShoppingCartItems();
             _ShoppingCart.ShoppingCartItems = items;
+            var User = await _userManager.GetUserAsync(HttpContext.User);
+            if (User != null)
+            {
+                var appUser = await _userData.GetUser(User.Id);
+                ViewBag.Street=appUser.Street;
+                ViewBag.City=appUser.City;
+                ViewBag.HouseNumber=appUser.HouseNumber;
+                ViewBag.Zipcode=appUser.Zipcode;
+             }
 
             var sCVM = new ShoppingCartViewModel
             {
@@ -97,21 +114,35 @@ namespace OnlineStore.Controllers
         }
 
         [Authorize]
-        public async Task<RedirectToActionResult> Buy()
+        public async Task<ActionResult> Buy()
         {
             try
             {
                 var items = _ShoppingCart.GetShoppingCartItems();
                 var User= await _userManager.GetUserAsync(HttpContext.User);
-                    
+                if (User != null)
+                {
+                    var appUser = await _userData.GetUser(User.Id);
 
-                await _userData.AddBoughtItemsToUser(items, User.Id);
+                    if (appUser.City.IsNullOrEmpty() || appUser.Street.IsNullOrEmpty() || appUser.Zipcode.IsNullOrEmpty() || appUser.HouseNumber.IsNullOrEmpty())
+                    {
+                        TempData["AddressError"] = "Set Address";
+                        return new EmptyResult();
+                    }
+                    else
+                    {
+                        await _userData.AddBoughtItemsToUser(items, User.Id);
+                    }
+                }
+                
+                
+                
 
                 
 
             }catch (Exception ex)
             {
-
+               
             }
             return RedirectToAction("OrderSummary");
         }

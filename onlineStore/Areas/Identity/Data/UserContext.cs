@@ -6,13 +6,12 @@ using OnlineStore.Areas.Identity.Data;
 
 namespace OnlineStore.Data;
 
-public class UserContext : IdentityDbContext<IdentityUser>
+public class UserContext : IdentityDbContext<ApplicationUser>
 {
     public UserContext(DbContextOptions<UserContext> options)
         : base(options)
     {
     }
-    public DbSet<OrderModel> Orders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -24,14 +23,15 @@ public class UserContext : IdentityDbContext<IdentityUser>
     }
 }
 
-internal class ApplicationUserentityConfiguration : IEntityTypeConfiguration<AppUser>
+internal class ApplicationUserentityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<AppUser> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.Property(u => u.FirstName).HasMaxLength(128);
         builder.Property(u => u.LastName).HasMaxLength(128);
         builder.Property(u => u.Street).HasMaxLength(128);
         builder.Property(u => u.Zipcode).HasMaxLength(128);
-        builder.Property(u=>u.City).HasMaxLength(128);  
+        builder.Property(u => u.City).HasMaxLength(128);
+        builder.Property(u => u.HouseNumber).HasMaxLength(16);
     }
 }

@@ -4,17 +4,26 @@ using StoreLibrary.Data;
 using StoreLibrary.Models;
 using OnlineStore.Data;
 using StoreLibrary.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using OnlineStore.Models;
+using StoreLibrary.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineStore.DataAccess
 {
     public class UserData : IUserData
     {
-        private readonly UserContext _db;
+        private readonly StoreDataContext _db;
+        private readonly UserContext _db2;
 
         private readonly IitemData _itemData;
         private readonly IHttpContextAccessor _contx;
-        public UserData(UserContext db, IitemData itemData, IHttpContextAccessor contx)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public UserData(StoreDataContext db,UserContext db2, IitemData itemData, IHttpContextAccessor contx,UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
+            _db2 = db2;
             _db = db;
             _itemData = itemData;
             _contx = contx;
@@ -47,6 +56,22 @@ namespace OnlineStore.DataAccess
                         }
                     }
                 }
+                var user =await  GetUser(userId); 
+                if (user != null)
+                {
+                    var address = new AddressModel()
+                    {
+                        CartId = items.FirstOrDefault().ShoppingCartId,
+                        City = user.City,
+                        Street = user.Street,
+                        HouseNumber = user.HouseNumber,
+                        Zipcode = user.Zipcode
+
+                    };
+                    await _db.AddressesForOrders.AddAsync(address);
+                    await _db.SaveChangesAsync();
+                }
+               
                 _contx.HttpContext.Session.SetString("CartId", Guid.NewGuid().ToString());
 
             }
@@ -54,6 +79,55 @@ namespace OnlineStore.DataAccess
             {
 
             }
+        }
+        public async Task<List<OrderandAddressViewModel>> GetUserOrders(string userId)
+        {
+            try
+            {
+                var items = await _db.Orders.Where(x => x.User == userId).ToListAsync();
+                if (items.Count != 0)
+                {
+
+                    var groupedOrdersList = items
+    .GroupBy(u => u.ShoppingCartId)
+    .Select(grp => grp.ToList())
+    .ToList();
+                    var returnList = new List<OrderandAddressViewModel>();
+                    foreach (var item in groupedOrdersList)
+                    {
+                        var list = new List<OrdersViewModel>();
+                        foreach (var it in item)
+                        {
+                            var tempItem = new OrdersViewModel();
+                            tempItem.OrderModel = it;
+                            tempItem.ItemModel = await _itemData.GetItemById(it.ItemId);
+                            list.Add(tempItem);
+                        }
+                        var shoppingCartid = list.FirstOrDefault().OrderModel.ShoppingCartId;
+                        var orderAndAddress = new OrderandAddressViewModel() { 
+                        ListOfOrders= list,
+                        AddressforOrder=await _db.AddressesForOrders.Where(x=> x.CartId== shoppingCartid).FirstOrDefaultAsync()
+                    };
+                        returnList.Add(orderAndAddress);
+
+                    }
+                    return returnList;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<ApplicationUser> GetUser(string userId)
+        {
+            var user = await _db2.Users.Where(x=> x.Id == userId).FirstOrDefaultAsync();
+            return user;
         }
     }
 }

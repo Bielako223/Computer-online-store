@@ -14,5 +14,7 @@ namespace StoreLibrary.Data
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<CategoryModel> Category { get; set; }
         public DbSet<ShoppingCartItemModel> ShoppingCartItems { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<AddressModel> AddressesForOrders { get; set; }
     }
 }
