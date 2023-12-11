@@ -44,17 +44,9 @@ namespace OnlineStore.DataAccess
                     };
                     await _db.Orders.AddAsync(itemModel);
                     await _db.SaveChangesAsync();
-
-                    for (int i = 0; i < items.Count; i++)
-                    {
-                        var itemById = await _itemData.GetItemById(item.Item.Id);
-                        if (itemById.Quantity > 0)
-                        {
-                            itemById.Quantity -= 1;
-                            await _itemData.UpdateItem(itemById);
-
-                        }
-                    }
+                    var itemById = await _itemData.GetItemById(item.Item.Id);
+                    itemById.Quantity-=item.Amount;
+                    await _itemData.UpdateItem(itemById);
                 }
                 var user =await  GetUser(userId); 
                 if (user != null)

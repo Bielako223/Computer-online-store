@@ -73,10 +73,12 @@ namespace OnlineStore.Areas.Identity.Pages.Account
         {
             [Required]
             [StringLength(100, ErrorMessage = "First name must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use only letters.")]
             [Display(Name = "FirstName")]
             public string FirstName { get; set; }
             [Required]
             [StringLength(100, ErrorMessage = "Last name must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use only letters.")]
             [Display(Name = "LastName")]
             public string LastName { get; set; }
             [Required]
@@ -89,10 +91,12 @@ namespace OnlineStore.Areas.Identity.Pages.Account
             public string Street { get; set; }
             [Required]
             [StringLength(100, ErrorMessage = "House number must be at least 1 and at max 10 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[1-9][0-9]*[a-zA-Z]*$", ErrorMessage = "Enter the valid house number.")]
             [Display(Name = "HouseNumber")]
             public string HouseNumber { get; set; }
             [Required]
             [StringLength(100, ErrorMessage = "Zip code must be at least 1 and at max 10 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[0-9]{2}-[0-9]{3}$", ErrorMessage ="Enter the zip-code in the form 00-000.")]
             [Display(Name = "Zipcode")]
             public string Zipcode { get; set; }
             /// <summary>

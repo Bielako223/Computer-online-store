@@ -1,38 +1,85 @@
 ﻿@using StoreLibrary.Models;
-@model List<ItemModel>
-@{
-    ViewData["Title"] = "Index";
-}
-<form method="post" asp-action="Index">
-    <input type="text" name="Name" value="@ViewBag.Name" />
-    <input type="number" name="Min" value="@ViewBag.min" min="0" max="10000" />
-    <input type="number" name="Max" value="@ViewBag.max" min="0" max="10000" />
-    <input type="radio" name="Category" value="1" @(ViewBag.category.Equals(1) ? "Checked" : String.Empty) />
-    <input type="radio" name="Category" value="2" @(ViewBag.category.Equals(2) ? "Checked" : String.Empty) />
-    <input type="radio" name="Category" value="0"/>
-    <input type="submit" />
-</form>
+@model Tuple<List<ItemModel>,List<CategoryModel>>
 
-@foreach(var obj in Model)
-{
-    <div >
-        
-        <a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">
-            <div>
-                <img src="/img/@obj.ImgPath" width="100px" height="100px" />
-                <h2>@obj.Name</h2>
-                @if (obj.Quantity==0)
-                {
-                    <button disabled="true">Niedostepny</button>
-                }
-                else
-                {
 
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Id">Add To Cart</a>
-                }
+<div class="container">
+<div class="mb-3">
+        <form method="post" asp-action="Index">
+            <div class="row">
+                <div class="col-md-3">
+                    <label></label>
+                    <input type="text" name="Name" value="@ViewBag.Name" placeholder="Search..." class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>Minimum price: </label>
+                    <input type="number" name="Min" value="@ViewBag.min" min="0" max="10000" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>Maximum price: </label>
+                    <input type="number" name="Max" value="@ViewBag.max" min="0" max="10000" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>Category: </label>
+                    <select name="Category" class="form-control">
+                        @foreach (var obj in Model.Item2)
+                        {
+                            @if (ViewBag.category.Equals(obj.Id))
+                            {
+                                <option value="@obj.Id" selected="selected">@obj.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@obj.Id">@obj.CategoryName</option>
+                            }
+
+                        }
+                        @if (ViewBag.category.Equals(0))
+                        {
+                            <option value="0" selected="selected">None</option>
+                        }
+                        else
+                        {
+                            <option value="0">None</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label></label>
+                    <input type="submit" value="Search" class="form-control" />
+                </div>
             </div>
-        </a>
+        </form>
+</div>
+
+    <div class="row" id="data-container">
+        @foreach (var obj in Model.Item1)
+        {
+            <div class="col-md-4 itemhover">
+                <a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">
+                    <div class="ItemContainer">
+
+                        <div class="ImgContainer"><span class="helper"></span><img class="img" src="/img/@obj.ImgPath" width="100%" /></div>
+                        <h4 class="itemName">@obj.Name</h4>
+                        <div>
+                            <div class="leftPrice"><h4 style="margin-bottom: 0; font-size: 2rem;">@obj.Price $</h4></div>
+                            <div class="rightbuy">
+                                @if (obj.Quantity == 0)
+                                {
+                                    <button disabled="true" class="btn">Unavailable</button>
+                                }
+                                else
+                                {
+
+                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Id"><h4><i class="bi bi-cart-check" style="font-size: 2rem;"></i></h4></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
     </div>
-}
+</div>
+
 
 

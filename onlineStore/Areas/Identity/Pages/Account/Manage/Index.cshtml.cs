@@ -52,19 +52,37 @@ namespace OnlineStore.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            [Display(Name = "First Name")]
+            [Required]
+            [StringLength(100, ErrorMessage = "First name must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use only letters.")]
+            [Display(Name = "FirstName")]
             public string FirstName { get; set; }
-            [Display(Name = "Last Name")]
+            [Required]
+            [StringLength(100, ErrorMessage = "Last name must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use only letters.")]
+            [Display(Name = "LastName")]
             public string LastName { get; set; }
+            [Required]
+            [StringLength(100, ErrorMessage = "Last name must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
             [Display(Name = "Username")]
             public string Username { get; set; }
-            [Display(Name = "city")]
+            [Required]
+            [StringLength(100, ErrorMessage = "City must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [Display(Name = "City")]
             public string City { get; set; }
-            [Display(Name = "street")]
+            [Required]
+            [StringLength(100, ErrorMessage = "Street must be at least 1 and at max 100 characters long.", MinimumLength = 1)]
+            [Display(Name = "Street")]
             public string Street { get; set; }
-            [Display(Name = "housenumber")]
+            [Required]
+            [StringLength(100, ErrorMessage = "House number must be at least 1 and at max 10 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[1-9][0-9]*[a-zA-Z]*$", ErrorMessage = "Enter the valid house number.")]
+            [Display(Name = "HouseNumber")]
             public string Housenumber { get; set; }
-            [Display(Name = "zipcode")]
+            [Required]
+            [StringLength(100, ErrorMessage = "Zip code must be at least 1 and at max 10 characters long.", MinimumLength = 1)]
+            [RegularExpression(@"^[0-9]{2}-[0-9]{3}$", ErrorMessage = "Enter the zip-code in the form 00-000.")]
+            [Display(Name = "Zipcode")]
             public string ZipCode { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -72,6 +90,7 @@ namespace OnlineStore.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Phone]
             [Display(Name = "Phone number")]
+            [RegularExpression(@"^(\+[0-9]{11})|([0-9]{9})|(\+[0-9]{2}\s[0-9]{3}\s[0-9]{3}\s[0-9]{3})|([0-9]{3}\s[0-9]{3}\s[0-9]{3})|(^$)$", ErrorMessage = "Enter the phone in the form +48123456789, +48 123 123 123, 123456789, 123 123 123")]
             public string PhoneNumber { get; set; }
         }
 
@@ -86,7 +105,6 @@ namespace OnlineStore.Areas.Identity.Pages.Account.Manage
             var firstName = user.FirstName;
             var lastName = user.LastName;
 
-            Username = userName;
 
             Input = new InputModel
             {
@@ -143,6 +161,7 @@ namespace OnlineStore.Areas.Identity.Pages.Account.Manage
             var street = user.Street;
             var housenumber = user.HouseNumber;
             var zipcode = user.Zipcode;
+            var username = user.UserName;
             if (Input.FirstName != firstName)
             {
                 user.FirstName = Input.FirstName;
@@ -171,6 +190,11 @@ namespace OnlineStore.Areas.Identity.Pages.Account.Manage
             if (Input.ZipCode != zipcode)
             {
                 user.Zipcode = Input.ZipCode;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Username != username)
+            {
+                user.UserName = Input.Username;
                 await _userManager.UpdateAsync(user);
             }
 

@@ -38,7 +38,7 @@ namespace OnlineStore.Controllers
                 ShoppingCart = _ShoppingCart,
                 ShoppingCartTotal = _ShoppingCart.GetShoppingCartTotal()
             };
-
+            ViewBag.total = _ShoppingCart.GetShoppingCartTotal();
             return View(sCVM);
         }
 

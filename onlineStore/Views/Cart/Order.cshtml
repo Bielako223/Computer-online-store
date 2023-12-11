@@ -20,12 +20,13 @@
         </tr>
     }
 </table>
-Total: @ViewBag.total
+Total: @ViewBag.total zł
 Address:
 @ViewBag.City
 @ViewBag.Street
 @ViewBag.HouseNumber
 @ViewBag.Zipcode
+<a href="/Identity/Account/Manage">Change Address</a>
 @if (User.Identity.IsAuthenticated)
 {
     <a asp-controller="Cart" asp-action="Buy">Buy</a>

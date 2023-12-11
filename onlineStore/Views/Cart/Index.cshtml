@@ -27,6 +27,7 @@
         </tr>
     }
 </table>
+Total: @ViewBag.total zł
 @if (User.Identity.IsAuthenticated)
 {
     <a asp-controller="Cart" asp-action="Order">Zamów</a>

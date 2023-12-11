@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StoreLibrary.DataAccess
 {
-    public class CategoryData
+    public class CategoryData : ICategoryData
     {
         private readonly StoreDataContext _db;
         public CategoryData(StoreDataContext db)

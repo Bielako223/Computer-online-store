@@ -22,6 +22,7 @@ builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(
 
 builder.Services.AddScoped<IUserData, UserData>();
 builder.Services.AddScoped<IitemData, ItemData>();
+builder.Services.AddScoped<ICategoryData, CategoryData>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();

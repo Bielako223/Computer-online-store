@@ -18,16 +18,17 @@ namespace OnlineStore.Controllers
         private readonly IHttpContextAccessor _contx; 
 
         private readonly IitemData _data;
+        private readonly ICategoryData _category;
         [ActivatorUtilitiesConstructor]
-        public ItemsController(IitemData data, IHttpContextAccessor contx)
+        public ItemsController(IitemData data, IHttpContextAccessor contx, ICategoryData category)
         {
-            
+            _category = category;
             _data = data;
             _contx = contx;
         }
         public async Task<IActionResult> Index()
         {
-            SearchingModel sessionFiltering = new SearchingModel();
+            var categories = await _category.GetAllCategories();
 
             if (_contx.HttpContext.Session.GetString("filter").IsNullOrEmpty())
             {
@@ -37,7 +38,7 @@ namespace OnlineStore.Controllers
                 ViewBag.category = 0;
                 string filteringString = JsonConvert.SerializeObject(new SearchingModel { Name = null, Min = 0, Max = 3000, Category = 0 });
                 _contx.HttpContext.Session.SetString("filter", filteringString);
-                return View(_items);
+                return View(Tuple.Create(_items,categories));
             }
             else
             {
@@ -54,7 +55,7 @@ namespace OnlineStore.Controllers
                 ViewBag.min = _filtering.Min;
                 ViewBag.max = _filtering.Max;
                 ViewBag.category = _filtering.Category;
-                return View(_items);
+                return View(Tuple.Create(_items, categories));
             }
 
             

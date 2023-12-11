@@ -1,21 +1,37 @@
 ﻿@using StoreLibrary.Models;
 @model ItemModel
-@{
-    ViewData["Title"] = "Details";
-}
-<img src="/img/@Model.ImgPath" alt="@Model.Name" width="300px" height="300px" />
-<h1>@Model.Name</h1>
-<h2>@Model.Price zł</h2>
-@if (Model.Quantity == 0)
-{
-    <button disabled="true">Niedostepny</button>
-}
-else
-{
 
-    <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@Model.Id">Add To Cart</a>
-}
-<a asp-controller="Items" asp-action="Index" class="btn btn-secondary" style="width:150px">
-    Back to Items
-</a>
+<div class="container">
+    <button class="btn">
+        <a asp-controller="Items" asp-action="Index" style="width:150px">
+            Back to Items
+        </a>
+    </button>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <img src ="/img/@Model.ImgPath" alt="@Model.Name" class="detailImg"/>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <h2>@Model.Name @Model.Description</h2>
+            <div>
+                <div class="leftPrice"><h1 style="margin-bottom: 0; font-size: 3rem;">@Model.Price $</h1></div>
+                <div class="rightbuy">
+                    @if (Model.Quantity == 0)
+                    {
+                        <button disabled="true" class="btn" style="height:3rem;"><h1>Unavailable</h1></button>
+                    }
+                    else
+                    {
+
+                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@Model.Id"><h1><i class="bi bi-cart-check" style="font-size: 3rem; padding-right: 2rem;"></i></h1></a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
