@@ -4,25 +4,24 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav ">
+
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-            <button class="btn btn-primary loginButton"> <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a></button>
+        <a class="nav-link navbarbuttons navBtnHover" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your account</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item navbarbuttons navBtnHover">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Items", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-primary loginButton">Logout</button>
+            <button id="logout" class=" nav-link navbarbuttons bg-light" style="border: none;" type="submit">Logout</button>
         </form>
     </li>
 }
 else
 {
     <li class="nav-item">
-            <button class="btn btn-primary loginButton"><a id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></button>
+        <a class="nav-link navbarbuttons navBtnHover" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
     <li class="nav-item">
-            <button class="btn btn-primary loginButton"><a id="login" asp-area="Identity" asp-page="/Account/Login">Login</a></button>
+        <a class="nav-link navbarbuttons navBtnHover" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>

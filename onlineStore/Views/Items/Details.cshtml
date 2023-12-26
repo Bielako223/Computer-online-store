@@ -1,30 +1,37 @@
 ﻿@using StoreLibrary.Models;
-@model ItemModel
+@model Tuple<ItemModel,List<string>>
 
 <div class="container">
-    <button class="btn">
-        <a asp-controller="Items" asp-action="Index" style="width:150px">
-            Back to Items
-        </a>
-    </button>
     <div class="row">
-        <div class="col-md-6 col-xs-12">
-            <img src ="/img/@Model.ImgPath" alt="@Model.Name" class="detailImg"/>
+        <div class="col-md-6 col-xs-12 mb-4 mt-2">
+            <img src="/img/@Model.Item1.ImgPath" alt="@Model.Item1.Name" class="detailImg" />
         </div>
         <div class="col-md-6 col-xs-12">
-            <h2>@Model.Name @Model.Description</h2>
-            <div>
-                <div class="leftPrice"><h1 style="margin-bottom: 0; font-size: 3rem;">@Model.Price $</h1></div>
-                <div class="rightbuy">
-                    @if (Model.Quantity == 0)
-                    {
-                        <button disabled="true" class="btn" style="height:3rem;"><h1>Unavailable</h1></button>
-                    }
-                    else
-                    {
+            <div class="row">
+                <div class="col-12 ml-2">
+                    <h2>@Model.Item1.Name @Model.Item1.Description</h2>
+                    <div>
+                        <div class="leftPrice"><h1 style="margin-bottom: 0; font-size: 3rem;">@Model.Item1.Price $</h1></div>
+                        <div class="rightbuy">
+                            @if (Model.Item1.Quantity == 0)
+                            {
+                                <button disabled="true" class="btn" style="height:3rem;"><h1>Unavailable</h1></button>
+                            }
+                            else
+                            {
 
-                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@Model.Id"><h1><i class="bi bi-cart-check" style="font-size: 3rem; padding-right: 2rem;"></i></h1></a>
-                    }
+                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@Model.Item1.Id"><h1><i class="bi bi-cart-check" style="font-size: 3rem; padding-right: 2rem;"></i></h1></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <ul>
+                        @foreach(var obj in Model.Item2)
+                        {
+                            <li>@obj</li>
+                        }
+                    </ul>
                 </div>
             </div>
         </div>

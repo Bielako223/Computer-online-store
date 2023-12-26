@@ -29,78 +29,80 @@ namespace OnlineStore.DataAccess
             _contx = contx;
         }
 
-        public async Task AddBoughtItemsToUser(List<ShoppingCartItemModel> items, string userId)
+        public async Task AddBoughtItemsToUser(List<ShoppingCartItemModel> items, string userId, float total)
         {
             try
             {
-                foreach (var item in items)
-                {
-                    var itemModel = new OrderModel()
-                    {
-                        ItemId = item.Item.Id,
-                        Amount = item.Amount,
-                        ShoppingCartId = item.ShoppingCartId,
-                        User = userId
-                    };
-                    await _db.Orders.AddAsync(itemModel);
-                    await _db.SaveChangesAsync();
-                    var itemById = await _itemData.GetItemById(item.Item.Id);
-                    itemById.Quantity-=item.Amount;
-                    await _itemData.UpdateItem(itemById);
-                }
-                var user =await  GetUser(userId); 
+                var user = await GetUser(userId);
                 if (user != null)
                 {
+                    var orderItems = new List<OrderItemModel>();
                     var address = new AddressModel()
                     {
-                        CartId = items.FirstOrDefault().ShoppingCartId,
                         City = user.City,
                         Street = user.Street,
                         HouseNumber = user.HouseNumber,
                         Zipcode = user.Zipcode
 
                     };
-                    await _db.AddressesForOrders.AddAsync(address);
-                    await _db.SaveChangesAsync();
-                }
-               
-                _contx.HttpContext.Session.SetString("CartId", Guid.NewGuid().ToString());
+                    foreach (var item in items)
+                    {
 
+                        var itemModel = new OrderItemModel()
+                        {
+                            ItemId = item.Item.Id,
+                            Amount = item.Amount,
+                            ItemPrice = item.Item.Price
+                        };
+                        orderItems.Add(itemModel);
+                        var itemById = await _itemData.GetItemById(item.Item.Id);
+                        itemById.Quantity -= item.Amount;
+                        await _itemData.UpdateItem(itemById);
+                    }
+                    var OrderModel = new OrderModel()
+                    {
+                        ShoppingCartId = items.FirstOrDefault().ShoppingCartId,
+                        User = userId,
+                        Address = address,
+                        Items= orderItems,
+                        Total = total
+
+                    };
+
+                    await _db.Orders.AddAsync(OrderModel);
+                    await _db.SaveChangesAsync();
+                    
+                    _contx.HttpContext.Session.SetString("CartId", Guid.NewGuid().ToString());
+                }
             }
             catch (Exception ex)
             {
 
             }
         }
-        public async Task<List<OrderandAddressViewModel>> GetUserOrders(string userId)
+        public async Task<List<OrdersViewModel>> GetUserOrders(string userId)
         {
             try
             {
-                var items = await _db.Orders.Where(x => x.User == userId).ToListAsync();
+                var items = await _db.Orders.Where(x => x.User == userId).Include(req=>req.Items).Include(req => req.Address).ToListAsync();
                 if (items.Count != 0)
                 {
-
-                    var groupedOrdersList = items
-    .GroupBy(u => u.ShoppingCartId)
-    .Select(grp => grp.ToList())
-    .ToList();
-                    var returnList = new List<OrderandAddressViewModel>();
-                    foreach (var item in groupedOrdersList)
+                    var returnList = new List<OrdersViewModel>();
+                    foreach (var item in items)
                     {
-                        var list = new List<OrdersViewModel>();
-                        foreach (var it in item)
+                        var list = new List<ItemModel>();
+                        foreach(var itemModel in item.Items)
                         {
-                            var tempItem = new OrdersViewModel();
-                            tempItem.OrderModel = it;
-                            tempItem.ItemModel = await _itemData.GetItemById(it.ItemId);
-                            list.Add(tempItem);
+                            var itemId = itemModel.ItemId;
+                            var itemById = await _itemData.GetItemById(itemId);
+                            list.Add(itemById);
                         }
-                        var shoppingCartid = list.FirstOrDefault().OrderModel.ShoppingCartId;
-                        var orderAndAddress = new OrderandAddressViewModel() { 
-                        ListOfOrders= list,
-                        AddressforOrder=await _db.AddressesForOrders.Where(x=> x.CartId== shoppingCartid).FirstOrDefaultAsync()
-                    };
-                        returnList.Add(orderAndAddress);
+                        var orderView = new OrdersViewModel()
+                        {
+                            OrderModel = item,
+                            ItemModels = list
+                        };
+                        returnList.Add(orderView);
 
                     }
                     return returnList;

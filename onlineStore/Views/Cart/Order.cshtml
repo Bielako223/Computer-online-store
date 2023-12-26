@@ -7,33 +7,70 @@
 {
     @TempData["AddressError"]
 }
-<table>
-    @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
-    {
-        <tr>
-            <th><img src="/img/@obj.Item.ImgPath" width="50px" height="50px" /></th>
-            <th>@obj.Item.Name</th>
-            <th>
-                [@obj.Amount]
-            </th>
-            <th>@obj.Item.Price zł</th>
-        </tr>
-    }
-</table>
-Total: @ViewBag.total zł
-Address:
-@ViewBag.City
-@ViewBag.Street
-@ViewBag.HouseNumber
-@ViewBag.Zipcode
-<a href="/Identity/Account/Manage">Change Address</a>
-@if (User.Identity.IsAuthenticated)
-{
-    <a asp-controller="Cart" asp-action="Buy">Buy</a>
-}
-else
-{
-    <span>zaloguj sie</span>
-}
+
+<div class="row">
+    <div class="col-12 ">
+        <a href="/Cart" class="btn btn-outline-primary mt-2"> <i class="bi bi-arrow-left"></i> back</a>
+        <div class="cartLeft">
+
+            @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
+            {
+                    <div class="row cartImgDiv mt-1">
+                        <div class="col-2">
+                            <img src="/img/@obj.Item.ImgPath" class="cartImg" alt="logo" />
+                        </div>
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12 cartInfo">
+                                    <span class="cartInfoText">@obj.Item.Name</span>
+                                </div>
+                                <div class="col-md-6 col-xs-12 cartInfo">
+                                    <div class="row">
+
+                                        <div class="col-6">
+                                            <span class="cartInfoPrice cartInfoText">@obj.Item.Price $</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="cartInfoTextRight">
+                                                <span class="cartInfoText">
+                                                @if (obj.Amount == 1)
+                                                {
+                                                    @obj.Amount <span>pc.</span>
+                                                }
+                                                else
+                                                {
+                                                    @obj.Amount <span>pcs.</span>
+                                                }
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            }
+            <div class="row mb-3">
+                <div class="col-lg-2 col-md-12 cartInfo">
+                    <span class="cartInfoText">Total: <span class="cartInfoPrice">@ViewBag.total $</span></span>
+                </div>
+                <div class="col-lg-5 col-md-12 cartInfo">
+                    <span class="cartInfoText">
+                        Address: 
+                        @ViewBag.City
+                        @ViewBag.Street
+                        @ViewBag.HouseNumber
+                        @ViewBag.Zipcode
+                    </span>
+                </div>
+                <div class="col-lg-5 col-md-12 cartInfo ">
+                    <div style="float:left;" class="m-1"><a href="/Identity/Account/Manage" class="btn btn-lg btn-outline-primary">Change Address</a></div>
+                    <div style="float:right;" class="m-4 mt-1 mb-1"><a asp-controller="Cart" asp-action="Buy"><div class="d-grid"><button type="button" class="btn btn-lg btn-outline-success">Purchase</button></div></a></div>
+                </div>
+            </div>
+        </div>
+        </div>
+
 
 

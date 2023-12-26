@@ -19,7 +19,7 @@ namespace StoreLibrary.Models
         public string Details { get; set; }
         public string ImgPath { get; set; }
         public int Quantity { get; set; }
-        public CategoryModel Category { get; set; } = new();
+        public  CategoryModel Category { get; set; } = new();
 
     }
 }

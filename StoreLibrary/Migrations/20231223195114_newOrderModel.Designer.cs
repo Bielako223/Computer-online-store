@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreLibrary.Data;
 
@@ -11,9 +12,11 @@ using StoreLibrary.Data;
 namespace StoreLibrary.Migrations
 {
     [DbContext(typeof(StoreDataContext))]
-    partial class StoreDataContextModelSnapshot : ModelSnapshot
+    [Migration("20231223195114_newOrderModel")]
+    partial class newOrderModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,9 +134,6 @@ namespace StoreLibrary.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<float>("ItemPrice")
-                        .HasColumnType("real");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -158,9 +158,6 @@ namespace StoreLibrary.Migrations
                     b.Property<string>("ShoppingCartId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
 
                     b.Property<string>("User")
                         .IsRequired()

@@ -15,6 +15,20 @@ namespace StoreLibrary.Data
         public DbSet<CategoryModel> Category { get; set; }
         public DbSet<ShoppingCartItemModel> ShoppingCartItems { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
-        public DbSet<AddressModel> AddressesForOrders { get; set; }
+        public DbSet<AddressModel> Address { get; set; }
+        public DbSet<OrderItemModel> OrderItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderModel>()
+                .HasOne<AddressModel>(p => p.Address)
+                .WithOne(pp => pp.Order)
+                .HasForeignKey<AddressModel>(pp => pp.OrderId);
+            modelBuilder.Entity<OrderModel>()
+                .HasMany<OrderItemModel>(p => p.Items)
+                .WithOne(pp => pp.Order)
+                .HasForeignKey(pp => pp.OrderId)
+                .IsRequired();
+        }
     }
 }

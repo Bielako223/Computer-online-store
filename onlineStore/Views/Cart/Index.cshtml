@@ -3,38 +3,127 @@
 @{
     ViewData["Title"] = "Index";
 }
-<table>
-    @if (TempData["limit"] != null)
-    {
-        @TempData["limit"]
-    }
-    @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
-    {
-        <tr>
-            <th><img src="/img/@obj.Item.ImgPath" width="50px" height="50px" /></th>
-            <th>@obj.Item.Name</th>
-            <th>
-                <a asp-controller="Cart" asp-action="RemoveOneItemFromCart" asp-route-itemId="@obj.Item.Id">-</a>
-                [@obj.Amount]
-                @if (obj.Amount < obj.Item.Quantity)
-                {
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Item.Id">+</a>
-                }
-                
-            </th>
-            <th>@obj.Item.Price zł</th>
-            <th> <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-itemId="@obj.Item.Id">Delete</a></th>
-        </tr>
-    }
-</table>
-Total: @ViewBag.total zł
-@if (User.Identity.IsAuthenticated)
+
+@if (Model.ShoppingCart.ShoppingCartItems.Any())
 {
-    <a asp-controller="Cart" asp-action="Order">Zamów</a>
+    var last = Model.ShoppingCart.ShoppingCartItems.Last();
+
+<div class="row">
+        <div class="col-md-8 col-xs-12 ">
+            @if (TempData["limit"] != null)
+            {
+                <div class="limit">
+                    @TempData["limit"]
+                </div>
+            }
+            <div class="cartLeft pt-1">
+
+                @foreach (var obj in Model.ShoppingCart.ShoppingCartItems)
+                {
+                    if (obj.Equals(last))
+                    {
+                        <div class="row cartImgDiv mb-2">
+                            <div class="col-2">
+                                <img src="/img/@obj.Item.ImgPath" class="cartImg" alt="logo" />
+                            </div>
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-12 cartInfo">
+                                        <span class="cartInfoText">@obj.Item.Name</span>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 cartInfo">
+                                        <div class="row">
+
+                                            <div class="col-6">
+                                                <span class="cartInfoPrice cartInfoText">@obj.Item.Price $</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="cartInfoTextRight">
+                                                    <span class="cartInfoText">
+                                                        <a asp-controller="Cart" asp-action="RemoveOneItemFromCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-dash-circle"></i></a>
+                                                        @obj.Amount
+                                                        @if (obj.Amount < obj.Item.Quantity)
+                                                        {
+                                                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-plus-circle"></i></a>
+                                                        }
+                                                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-trash"></i></a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row cartImgDiv mt-1">
+                            <div class="col-2">
+                                <img src="/img/@obj.Item.ImgPath" class="cartImg" alt="logo" />
+                            </div>
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-12 cartInfo">
+                                        <span class="cartInfoText">@obj.Item.Name</span>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 cartInfo">
+                                        <div class="row">
+
+                                            <div class="col-6">
+                                                <span class="cartInfoPrice cartInfoText">@obj.Item.Price $</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="cartInfoTextRight">
+                                                    <span class="cartInfoText">
+                                                        <a asp-controller="Cart" asp-action="RemoveOneItemFromCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-dash-circle"></i></a>
+                                                        @obj.Amount
+                                                        @if (obj.Amount < obj.Item.Quantity)
+                                                        {
+                                                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-plus-circle"></i></a>
+                                                        }
+                                                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-itemId="@obj.Item.Id"><i class="bi bi-trash"></i></a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="cartLeft">
+                <div class="row">
+                    <div class="col-12 totalPrice">
+                        <div style="float:left"><h3>Total:</h3></div>
+                        <div style="float:right"><h3>@ViewBag.total $</h3></div>
+                    </div>
+                    <div class="col-12 totalPrice">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+                            <a asp-controller="Cart" asp-action="Order"><div class="d-grid"><button type="button" class="btn btn-block btn-lg btn-outline-success">Order summary</button></div></a>
+                            
+                        }
+                        else
+                        {
+                            <a class="nav-link navbarbuttons" id="login" asp-area="Identity" asp-page="/Account/Login"><button type="button" style="width:100%" class="btn btn-lg btn-block btn-outline-success">Login</button></a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <span>zaloguj sie</span>
+    <h3>Cart is empty.</h3>
 }
+
 
 

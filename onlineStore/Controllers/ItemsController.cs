@@ -60,34 +60,6 @@ namespace OnlineStore.Controllers
 
             
         }
-
-
-
-        //public async Task<IActionResult> Index(Object str)
-        //{
-        //    str
-        //    var items = await _data.GetAllItems();
-        //    ViewBag.min = 0;
-        //    ViewBag.max = 3000;
-        //    ViewBag.category = 0;
-        //    return View(items);
-        //}
-
-        /* [HttpPost]
-         public async Task<IActionResult> Index(string searchingName="", int priceMin=0, int priceMax=3000, int categoryId = 0)
-         {
-             var searching = searchingName;
-             var min = priceMin;
-             var max = priceMax;
-             var category = categoryId;
-
-             _items = await _data.GetSearchedItems(searching,min,max,category);
-
-
-        eturn View(_items);
-         }
-         */
-   
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -99,7 +71,8 @@ namespace OnlineStore.Controllers
             {
                 return NotFound();
             }
-            return View(ItemById);
+            var details =ItemById.Details.Split("/t").ToList();
+            return View(Tuple.Create(ItemById, details));
         }
 
     }

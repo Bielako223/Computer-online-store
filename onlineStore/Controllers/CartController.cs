@@ -55,7 +55,7 @@ namespace OnlineStore.Controllers
                     }
                     else
                     {
-                        TempData["limit"] = "Limit of this item";
+                        TempData["limit"] = "Limit of item";
                     }
                 }
                 else
@@ -120,6 +120,7 @@ namespace OnlineStore.Controllers
             {
                 var items = _ShoppingCart.GetShoppingCartItems();
                 var User= await _userManager.GetUserAsync(HttpContext.User);
+                var total = _ShoppingCart.GetShoppingCartTotal();
                 if (User != null)
                 {
                     var appUser = await _userData.GetUser(User.Id);
@@ -131,7 +132,7 @@ namespace OnlineStore.Controllers
                     }
                     else
                     {
-                        await _userData.AddBoughtItemsToUser(items, User.Id);
+                        await _userData.AddBoughtItemsToUser(items, User.Id, (float)total);
                     }
                 }
                 

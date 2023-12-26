@@ -1,28 +1,74 @@
 ﻿@using OnlineStore.Models;
-@model List<OrderandAddressViewModel>
+@model List<OrdersViewModel>
 
 
-<a href="/Identity/Account/Manage">back</a>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/Identity/Account/Manage" class="btn btn-outline-primary mt-2"> <i class="bi bi-arrow-left"></i> Profile</a>
 @foreach(var mainList in Model)
 {
-    var sum = 0;
-    <div style="margin:20px">
-        <ul>
-        @foreach(var item in mainList.ListOfOrders)
-        {
-            <li>
+            <div class="row">
+                <div class="col-md-8 col-xs-12 ">
+                    <div class="cartLeft">
 
-                    <img src="/img/@item.ItemModel.ImgPath" width="100px" height="100px" />
-                    @item.ItemModel.Name
-                    @item.ItemModel.Price
-                </li>
-                sum = sum + item.ItemModel.Price;
-            }
-        </ul>
-        @sum
-        @mainList.AddressforOrder.City
-        @mainList.AddressforOrder.Street
-        @mainList.AddressforOrder.HouseNumber
-        @mainList.AddressforOrder.Zipcode
-    </div>
+                        @foreach (var items in mainList.OrderModel.Items)
+                        {
+                            var item = mainList.ItemModels.FirstOrDefault(p => p.Id == items.ItemId);
+                                <div class="row cartImgDiv mt-1">
+                                    <div class="col-2">
+                                        <img src="/img/@item.ImgPath" class="cartImg" alt="logo" />
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="row">
+                                            <div class="col-md-6 col-xs-12 cartInfo">
+                                                <span class="cartInfoText">@item.Name</span>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 cartInfo">
+                                                <div class="row">
+
+                                                    <div class="col-6">
+                                                        <span class="cartInfoPrice cartInfoText">@items.ItemPrice $</span>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="cartInfoTextRight">
+                                                            <span class="cartInfoText">
+                                                                @if (items.Amount == 1)
+                                                                {
+                                                                    @items.Amount <span>pc.</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @items.Amount <span>pcs.</span>
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                        }
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-sm-12 cartInfo">
+                                <span class="cartInfoText"> Date: @mainList.OrderModel.Date.ToString("dd/MM/yyyy")</span><br>
+                                <span class="cartInfoText">Total: <span class="cartInfoPrice">@mainList.OrderModel.Total $</span></span>
+                            </div>
+                            <div class="col-md-8 col-sm-12 cartInfo">
+                                <span class="cartInfoText">
+                                    Address:<br>
+                                    @mainList.OrderModel.Address.Zipcode
+                                    @mainList.OrderModel.Address.City
+                                    @mainList.OrderModel.Address.Street
+                                    @mainList.OrderModel.Address.HouseNumber
+                                    </span>
+                            </div>
+                        </div>
+                </div>
+                </div>
+            </div>
 }
+    </div>
+</div>

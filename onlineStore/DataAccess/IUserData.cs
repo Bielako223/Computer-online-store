@@ -6,8 +6,8 @@ namespace OnlineStore.DataAccess
 {
     public interface IUserData
     {
-        Task AddBoughtItemsToUser(List<ShoppingCartItemModel> items, string userId);
-        Task<List<OrderandAddressViewModel>> GetUserOrders(string userId);
+        Task AddBoughtItemsToUser(List<ShoppingCartItemModel> items, string userId, float total);
+        Task<List<OrdersViewModel>> GetUserOrders(string userId);
         Task<ApplicationUser> GetUser(string userId);
     }
 }
