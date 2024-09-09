@@ -1,6 +1,6 @@
 ## Computer online store
 
-An example of responsive <b>Computer online store</b> website built with ASP.NET CORE MVC and MS SQL database.
+An example of responsive <b>Computer online store</b> website built with ASP.NET CORE MVC and MS SQL database.<br>
 Link: https://computeronlinestore.azurewebsites.net/
 ## How to install the Project
 <ul>
