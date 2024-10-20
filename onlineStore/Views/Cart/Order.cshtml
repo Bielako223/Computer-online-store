@@ -17,7 +17,7 @@
             {
                     <div class="row cartImgDiv mt-1">
                         <div class="col-2">
-                            <img src="/img/@obj.Item.ImgPath" class="cartImg" alt="logo" />
+                            <img src="@Url.Action("GetImage", "Items", new { id = obj.Item.Id })" class="cartImg" alt="logo" />
                         </div>
                         <div class="col-10">
                             <div class="row">

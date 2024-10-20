@@ -60,7 +60,7 @@
                 <a asp-controller="Items" asp-action="Details" asp-route-id="@obj.Id">
                     <div class="ItemContainer">
 
-                        <div class="ImgContainer"><span class="helper"></span><img class="img" src="/img/@obj.ImgPath" width="100%" /></div>
+                        <div class="ImgContainer"><span class="helper"></span><img class="img" src="@Url.Action("GetImage", "Items", new { id = obj.Id })" width="100%" /></div>
                         <h4 class="itemName">@obj.Name</h4>
                         <div>
                             <div class="leftPrice"><h4 style="margin-bottom: 0; font-size: 2rem;">@obj.Price $</h4></div>

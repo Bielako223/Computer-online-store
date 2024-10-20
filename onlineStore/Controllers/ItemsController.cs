@@ -75,5 +75,20 @@ namespace OnlineStore.Controllers
             return View(Tuple.Create(ItemById, details));
         }
 
+        public async Task<IActionResult> GetImage(int id)
+        {
+            // Znalezienie elementu z odpowiednim Id
+            var item = await _data.GetItemById(id);
+
+            // Sprawdzenie czy obraz istnieje
+            if (item == null || item.ImgData == null)
+            {
+                return NotFound();  // Możesz zwrócić placeholder w przypadku braku obrazu
+            }
+
+            // Zwrócenie obrazu w formie pliku
+            return File(item.ImgData, "image/jpeg");  // Upewnij się, że typ MIME odpowiada typowi obrazu (jpeg, png itd.)
+        }
+
     }
 }

@@ -4,7 +4,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-xs-12 mb-4 mt-2">
-            <img src="/img/@Model.Item1.ImgPath" alt="@Model.Item1.Name" class="detailImg" />
+            <img src="@Url.Action("GetImage", "Items", new { id = Model.Item1.Id })" alt="@Model.Item1.Name" class="detailImg" />
+
         </div>
         <div class="col-md-6 col-xs-12">
             <div class="row">
