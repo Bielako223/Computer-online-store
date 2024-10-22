@@ -1,6 +1,6 @@
 ## Computer online store
 
-<i>Powered by ASP.NET Core MVC and MS SQL Database<i/><br/><br/>
+<i>Powered by ASP.NET Core MVC and MS SQL Database</i><br/><br/>
 The Computer Online Store is your one-stop shop for all computer components, providing an easy-to-navigate interface for browsing, purchasing, and managing your orders. The store is built using modern web technologies like ASP.NET Core MVC for the backend and MS SQL Database for secure and scalable data management.
 
 
