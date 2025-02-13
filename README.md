@@ -45,6 +45,6 @@ The Computer Online Store is your one-stop shop for all computer components, pro
 ## How to install the Project
 <ul>
   <li>Download Computer online store repository.</li>
-  <li>Import databaseForapp.bacpac file to MS SQL database.</li>
+  <li>Import backupDB2.bacpac file to MS SQL database.</li>
   <li>Open repository in Microsoft Visual Studio and set ConnectionStrings in appsettings.json file.</li>
 </ul>
