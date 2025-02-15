@@ -5,7 +5,7 @@ The Computer Online Store is your one-stop shop for all computer components, pro
 
 
 ## How to Use the Project
-
+> 📌 *Click on the images for better quality!*
 <ul>
   <li>
     <p>On the home page, you can see all available items in the store. Users can filter products by category or price, add them directly to their shopping cart, or click on an item to view more details.</p>
